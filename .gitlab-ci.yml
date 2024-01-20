@@ -1,0 +1,24 @@
+include:
+  - project: 'widya-imersif-teknologi/gitlab-ci-templates'
+    ref: main
+    file: '/templates/.deploy.yml'
+
+image: node:16
+
+stages:
+  - quality
+  - deploy
+
+linting:
+ stage: quality
+ script:
+  - npm install
+  - npm run lint:check
+
+deploy:
+  extends: .deploy
+  script:
+    - ssh $SSH_SERVER "cd $WORK_DIR && npm install &&  npm run build"
+    - ssh $SSH_SERVER "cd $WORK_DIR && pm2 startOrRestart pm2.config.js && pm2 save"
+  dependencies:
+    - linting

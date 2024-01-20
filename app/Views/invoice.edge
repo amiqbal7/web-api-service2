@@ -1,0 +1,85 @@
+<mjml>
+  <mj-body background-color="white">
+    <mj-section padding="0">
+      <mj-column width="50%">
+        <mj-text font-size="40px" font-weight="bold">
+          E3D Imaging
+        </mj-text>
+        <mj-text align="left" font-size="20px" color="#4B5563">
+          <strong>Invoice #{{order.number}}</strong>
+        </mj-text>
+        <mj-text align="left" font-size="16px">
+          <p style="font-size:30px;font-weight:bold;">
+            STATUS: <span style="color:{{ order.status === 'cancel' ? 'red' : 'green' }};">{{ order.status === 'cancel' ? "CANCEL" : "PAID" }}</span>
+          </p>
+          <p>Invoice Date: {{order.createdAt.toFormat('yyyy-LL-dd')}}</p>
+          <p>Due Date: {{order.createdAt.toFormat('yyyy-LL-dd')}}</p>
+        </mj-text>
+      </mj-column>
+      <mj-column width="50%" />
+    </mj-section>
+    <mj-section padding="0">
+      <mj-column width="50%">
+        <mj-text align="left" font-size="16px">
+          <strong>Invoiced To</strong>
+          <p>{{order.company}}</p>
+          <p>{{order.address}}</p>
+        </mj-text>
+      </mj-column>
+      <mj-column width="50%">
+        <mj-text align="left" font-size="16px">
+          <strong>Pay To</strong>
+          <p>PT Widya Imersif Teknologi</p>
+          <p>Gang Mawar, Nomor 98D, RT.05/RW.22, Jatirejo, Sendangadi, Kec. Mlati, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55285</p>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="8px 0" border="1px solid #ecedee">
+      <mj-column padding="0" width="100%">
+        <mj-text padding="8px" font-size="16px">
+          <strong>Invoice Items</strong>
+        </mj-text>
+      </mj-column>
+      <mj-column width="100%">
+        <mj-table padding="0">
+          <tr style="border-bottom:1px solid #ecedee">
+            <th style="padding: 8px;" align="left">Description</th>
+            <th style="padding: 8px;" align="center">Qty</th>
+            <th style="padding: 8px;" align="left">Price</th>
+            <th style="padding: 8px;" align="right">Amount</th>
+          </tr>
+          <tr>
+            <td style="padding: 8px;" align="left">
+              {{order.type === 'stl' ? 'DICOM ke STL' : 'DICOM ke 3D Print'}}
+            </td>
+            <td style="padding: 8px;" align="center">1</td>
+            <td style="padding: 8px;" align="left">
+              {{new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(order.price)}}
+            </td>
+            <td style="padding: 8px;" align="right">
+              {{new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(order.price*1)}}
+            </td>
+          </tr>
+          <tr style="border-top:1px solid #ecedee">
+            <th style="padding: 8px;" align="right" colspan="3">Subtotal</th>
+            <td style="padding: 8px;" align="right">
+              {{new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(order.price*1)}}
+            </td>
+          </tr>
+          <tr>
+            <th style="padding: 8px;" align="right" colspan="3">Shipping</th>
+            <td style="padding: 8px;" align="right">
+              {{new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(order.courierType === 'gosend' ? order.courierGosendPrice : order.courierJntPrice)}}
+            </td>
+          </tr>
+          <tr>
+            <th style="padding: 8px;" align="right" colspan="3">Total</th>
+            <td style="padding: 8px;" align="right">
+              {{new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(Number(order.price*1)+Number(order.courierType === 'gosend' ? order.courierGosendPrice : order.courierJntPrice))}}
+            </td>
+          </tr>
+        </mj-table>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
